@@ -18,11 +18,7 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
     private String description;
-    private String status;
-    private String priority;
-    private LocalDateTime createdAt;
-
+    private boolean isComplete;
 
 }
