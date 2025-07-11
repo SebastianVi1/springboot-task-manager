@@ -39,4 +39,9 @@ public class TaskController {
     public void deleteAll(){
         service.deleteAll();
     }
+
+    @PutMapping("/complete-task/{id}")
+    public void completeTask(@RequestBody Task task){
+        service.completeTask(task);
+    }
 }

@@ -41,4 +41,8 @@ public class TaskService {
     public void deleteAll() {
         repo.deleteAll();
     }
+
+    public void completeTask(Task task) {
+        repo.save(task);
+    }
 }
