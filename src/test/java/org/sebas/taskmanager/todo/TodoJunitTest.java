@@ -15,7 +15,7 @@ public class TodoJunitTest {
         assertEquals("TEST", test.getDescription(), "Task description is not TEST");
 
         var failedTest = new Task(2L, "DESCRIPTION", false);
-        assertFalse(failedTest.isComplete(), "The task is true");
+        assertFalse(failedTest.isCompleted(), "The task is true");
     }
 
 }
