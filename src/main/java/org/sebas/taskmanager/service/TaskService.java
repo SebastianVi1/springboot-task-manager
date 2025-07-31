@@ -14,21 +14,22 @@ public class TaskService {
 
     private TaskRepo repo;
 
-    @Autowired
-    public void setRepo(TaskRepo repo){
-        this.repo = repo;
+    public TaskService(TaskRepo taskRepo) {
+        this.repo = taskRepo;
     }
+
+
 
 
     public List<Task> getAllTasks() {
         return repo.findAll();
     }
 
-    public void deleteTask(int id) {
+    public void deleteTask(Long id) {
         repo.deleteById(id);
     }
 
-    public ResponseEntity addTask(Task task) {
+    public ResponseEntity<?> addTask(Task task) {
         try{
             repo.save(task);
             return new ResponseEntity<Task>(task, HttpStatus.OK);
