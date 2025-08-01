@@ -29,12 +29,12 @@ public class TaskService {
         repo.deleteById(id);
     }
 
-    public ResponseEntity<?> addTask(Task task) {
+    public ResponseEntity<Task> addTask(Task task) {
         try{
             repo.save(task);
             return new ResponseEntity<Task>(task, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.CONFLICT);
+            return new ResponseEntity<Task>(task,HttpStatus.CONFLICT);
         }
     }
 

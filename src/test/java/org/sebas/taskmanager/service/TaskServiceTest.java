@@ -34,7 +34,8 @@ class TaskServiceTest {
     void shouldGetAllTasks() {
         var task = new Task(1L, "Mock", true);
         when(taskRepo.findAll()).thenReturn(List.of(
-                task
+                task,
+                new Task(2L, "TEST", false)
         ));
         List<Task> result = underTest.getAllTasks();
         assertThat(result)
@@ -44,9 +45,14 @@ class TaskServiceTest {
         assertThat(result.get(0))
                 .isNotNull()
                 .isEqualTo(task);
+        assertThat(result.size())
+                .isPositive()
+                .isEqualTo(2);
 
         // verify if the repo is used
         verify(taskRepo).findAll();
+
+
     }
 
     @Test
@@ -64,13 +70,13 @@ class TaskServiceTest {
         Task inputTask = new Task(1L, "Learn Mockito", false);
         when(taskRepo.save(any(Task.class))).thenReturn(inputTask);
 
+        ResponseEntity<?> response = underTest.addTask(inputTask);
 
-        underTest.addTask(inputTask);
-
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo(inputTask);
 
         taskCaptor = ArgumentCaptor.forClass(Task.class);
         verify(taskRepo).save(taskCaptor.capture());
-
 
         Task captured = taskCaptor.getValue();
         assertThat(captured)
@@ -85,6 +91,17 @@ class TaskServiceTest {
         underTest.deleteAll();
 
         verify(taskRepo).deleteAll();
+    }
+
+    @Test
+    void shouldReturnConflictStatusWhenAddTaskFails(){
+        Task inputTask = new Task(1L, "Learn Mockito", false);
+        when(taskRepo.save(any(Task.class))).thenThrow(new RuntimeException("Database error"));
+
+        ResponseEntity<?> response = underTest.addTask(inputTask);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(response.getBody()).isEqualTo(inputTask);
     }
 
 
