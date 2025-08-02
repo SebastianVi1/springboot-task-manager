@@ -23,7 +23,6 @@ public class Task {
     private Long id;
     private String description;
     @JsonProperty("isCompleted")
-    @Column(name = "is_complete")
     private boolean isCompleted;
 
 }

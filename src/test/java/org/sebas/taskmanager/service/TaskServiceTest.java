@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.sebas.taskmanager.model.Task;
+import org.sebas.taskmanager.model.TaskDto;
 import org.sebas.taskmanager.repo.TaskRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,15 +38,16 @@ class TaskServiceTest {
                 task,
                 new Task(2L, "TEST", false)
         ));
-        List<Task> result = underTest.getAllTasks();
+        ResponseEntity<List<Task>> result = underTest.getAllTasks();
+
         assertThat(result)
                 .isNotNull();
 
         //check if the object in the list is the same
-        assertThat(result.get(0))
+        assertThat(result.getBody().get(0))
                 .isNotNull()
                 .isEqualTo(task);
-        assertThat(result.size())
+        assertThat(result.getBody().size())
                 .isPositive()
                 .isEqualTo(2);
 
@@ -67,8 +69,9 @@ class TaskServiceTest {
     @Test
     void shouldAddATask(){
         ArgumentCaptor<Task> taskCaptor;
-        Task inputTask = new Task(1L, "Learn Mockito", false);
-        when(taskRepo.save(any(Task.class))).thenReturn(inputTask);
+        TaskDto inputTask = new TaskDto("Learn mockito", false);
+        Task task = new Task(null, "learn mockito", false);
+        when(taskRepo.save(any(Task.class))).thenReturn(task);
 
         ResponseEntity<?> response = underTest.addTask(inputTask);
 
@@ -95,7 +98,8 @@ class TaskServiceTest {
 
     @Test
     void shouldReturnConflictStatusWhenAddTaskFails(){
-        Task inputTask = new Task(1L, "Learn Mockito", false);
+        TaskDto inputTask = new TaskDto("Learn mockito", false);
+        Task task = new Task(null, "learn mockito", false);
         when(taskRepo.save(any(Task.class))).thenThrow(new RuntimeException("Database error"));
 
         ResponseEntity<?> response = underTest.addTask(inputTask);

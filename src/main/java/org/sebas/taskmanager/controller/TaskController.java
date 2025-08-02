@@ -1,6 +1,7 @@
 package org.sebas.taskmanager.controller;
 
 import org.sebas.taskmanager.model.Task;
+import org.sebas.taskmanager.model.TaskDto;
 import org.sebas.taskmanager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class TaskController {
     }
 
     @GetMapping("/get-tasks")
-    public List<Task> getAllTasks(){
+    public ResponseEntity<List<Task>> getAllTasks(){
         return service.getAllTasks();
     }
 
@@ -31,7 +32,7 @@ public class TaskController {
     }
 
     @PostMapping("/add-task")
-    public ResponseEntity<?> addTask(@RequestBody Task task){
+    public ResponseEntity<Task> addTask(@RequestBody TaskDto task){
         return service.addTask(task);
     }
 

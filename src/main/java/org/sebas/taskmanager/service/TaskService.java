@@ -1,6 +1,7 @@
 package org.sebas.taskmanager.service;
 
 import org.sebas.taskmanager.model.Task;
+import org.sebas.taskmanager.model.TaskDto;
 import org.sebas.taskmanager.repo.TaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskService {
@@ -21,21 +23,24 @@ public class TaskService {
 
 
 
-    public List<Task> getAllTasks() {
-        return repo.findAll();
+    public ResponseEntity<List<Task>> getAllTasks() {
+
+        List<Task> taskList = repo.findAll();
+
+        return ResponseEntity.ok(taskList);
+
     }
 
     public void deleteTask(Long id) {
         repo.deleteById(id);
     }
 
-    public ResponseEntity<Task> addTask(Task task) {
-        try{
-            repo.save(task);
-            return new ResponseEntity<Task>(task, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<Task>(task,HttpStatus.CONFLICT);
-        }
+    public ResponseEntity<Task> addTask(TaskDto task) {
+        Task tas = new Task();
+        tas.setDescription(task.getDescription());
+        tas.setCompleted(task.isCompleted());
+        Task task1 = repo.save(tas);
+        return ResponseEntity.ok(task1);
     }
 
 
