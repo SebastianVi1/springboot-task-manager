@@ -52,4 +52,16 @@ class TaskControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    void shouldReturnErrorAddingATask() throws Exception {
+        TaskDto taskDto = new TaskDto();
+        mockMvc.perform(post("/api/add-task")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(taskDto)));
+
+    }
+
+
+
 }

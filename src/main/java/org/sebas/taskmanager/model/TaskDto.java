@@ -2,8 +2,10 @@ package org.sebas.taskmanager.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class TaskDto {
     String description;
     @JsonProperty("isCompleted")

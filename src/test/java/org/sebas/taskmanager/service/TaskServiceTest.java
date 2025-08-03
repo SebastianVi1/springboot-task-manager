@@ -73,17 +73,15 @@ class TaskServiceTest {
         Task task = new Task(null, "learn mockito", false);
         when(taskRepo.save(any(Task.class))).thenReturn(task);
 
-        ResponseEntity<?> response = underTest.addTask(inputTask);
+        ResponseEntity<Task> response = underTest.addTask(inputTask);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isEqualTo(inputTask);
+        assertThat(response.getBody()).isEqualTo(task);
 
         taskCaptor = ArgumentCaptor.forClass(Task.class);
         verify(taskRepo).save(taskCaptor.capture());
 
         Task captured = taskCaptor.getValue();
-        assertThat(captured)
-                .isEqualTo(inputTask);
         assertThat(captured.getDescription())
                 .isEqualToIgnoringCase("learn mockito");
         assertThat(captured.isCompleted()).isFalse();
@@ -99,14 +97,14 @@ class TaskServiceTest {
     @Test
     void shouldReturnConflictStatusWhenAddTaskFails(){
         TaskDto inputTask = new TaskDto("Learn mockito", false);
-        Task task = new Task(null, "learn mockito", false);
         when(taskRepo.save(any(Task.class))).thenThrow(new RuntimeException("Database error"));
 
-        ResponseEntity<?> response = underTest.addTask(inputTask);
+        ResponseEntity<Task> response = underTest.addTask(inputTask);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
-        assertThat(response.getBody()).isEqualTo(inputTask);
+        assertThat(response.getBody()).isNull();
     }
+
 
 
 }

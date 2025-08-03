@@ -36,11 +36,15 @@ public class TaskService {
     }
 
     public ResponseEntity<Task> addTask(TaskDto task) {
-        Task tas = new Task();
-        tas.setDescription(task.getDescription());
-        tas.setCompleted(task.isCompleted());
-        Task task1 = repo.save(tas);
-        return ResponseEntity.ok(task1);
+        try {
+            Task tas = new Task();
+            tas.setDescription(task.getDescription());
+            tas.setCompleted(task.isCompleted());
+            Task task1 = repo.save(tas);
+            return ResponseEntity.ok(task1);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 
 
@@ -49,6 +53,7 @@ public class TaskService {
     }
 
     public void completeTask(Task task) {
+        task.setCompleted(true);
         repo.save(task);
     }
 }
